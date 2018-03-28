@@ -29,6 +29,13 @@ enum Theme {
 			$0.textColor = #colorLiteral(red: 0.3333333333, green: 0.3333333433, blue: 0.3333333433, alpha: 1)
 			$0.tintColor = #colorLiteral(red: 0.9986756444, green: 0.2878709137, blue: 0.4008231759, alpha: 1)
 		}
+		
+		static var button: UIStyle<UIButton> = UIStyle<UIButton> {
+			$0.setTitle(NSLocalizedString("Join to Pets", comment: ""), for: UIControlState.normal)
+			$0.setTitleColor(#colorLiteral(red: 0.9986756444, green: 0.2878709137, blue: 0.4008231759, alpha: 1), for: UIControlState.normal)
+			$0.setTitleColor(#colorLiteral(red: 0.937036097, green: 0.9411780238, blue: 0.945192039, alpha: 1), for: UIControlState.disabled)
+			$0.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.medium)			
+		}
 	}
 	
 	enum Login {

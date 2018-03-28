@@ -43,11 +43,10 @@ final class JoinViewController: UIViewController {
 	
 	
 	private lazy var createAccountButton: UIButton = {
-		$0.addTarget($1, action: .createAccount, for: .touchUpInside)
 		$0.translatesAutoresizingMaskIntoConstraints = false
-		$0.apply(Theme.Login.createAccountButton)
+		$0.apply(Theme.Default.button)
 		return $0
-	}(Button(type: .system), self)
+	}(Button(type: .system))
 	
 	private lazy var tableFooterView: UIView = {
 		let stackView = UIStackView(arrangedSubviews: [$0])
@@ -125,7 +124,18 @@ extension JoinViewController {
 		let emailValid = emailObservable.map(validateEmail)
 		let mobilePhoneValid = mobilePhoneObservable.map(validateMobilePhone)
 		
+		func allFieldsValidSelector(passwordValid: Bool, usernameValid: Bool, emailValid: Bool, mobilePhoneValid: Bool) -> Bool {
+			return passwordValid && usernameValid && emailValid && mobilePhoneValid
+		}
 		
+		let allFieldsValid = Observable.combineLatest(passwordValid,
+													  usernameValid,
+													  emailValid,
+													  mobilePhoneValid, resultSelector: allFieldsValidSelector)
+		allFieldsValid
+			.debug()
+			.bind(to: createAccountButton.rx.isEnabled)
+			.disposed(by: disposeBag)
 		
 	}
 	
@@ -191,30 +201,5 @@ extension JoinViewController: UITableViewDataSource {
 			.disposed(by: cell.rx.disposeBag)
 		
 		return cell
-	}
-}
-
-private extension Selector {
-	static let createAccount = #selector(JoinViewController.createAccount(sender:))
-}
-
-extension JoinViewController {
-	private func usernameDidChange(_ username: String) {
-		
-		
-	}
-	
-	private func passwordDidChange(_ password: String) {
-		
-	}
-	
-	private func passwordConfirmationDidChange(_ password: String) {
-		
-	}
-	private func emailDidChange(_ password: String) {
-		
-	}
-	@objc fileprivate func createAccount(sender: Any) {
-		
 	}
 }
