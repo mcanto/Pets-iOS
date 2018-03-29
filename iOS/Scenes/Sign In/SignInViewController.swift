@@ -13,7 +13,7 @@ import RxCocoa
 
 final class SignInViewController: UIViewController {
 	
-	var delegate: ActionDelegate?
+	weak var delegate: ActionDelegate?
 	
 	enum Action: DelegatedAction {
 		case createAccount
@@ -35,7 +35,7 @@ final class SignInViewController: UIViewController {
 			$0.topAnchor.constraint(equalTo: $2.view.topAnchor),
 			$0.bottomAnchor.constraint(equalTo: $2.view.bottomAnchor)
 			])
-		$0.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseID)
+		$0.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseId)
 		$0.tableFooterView = $1
 		return $0
 	}(UITableView.init(frame: CGRect.zero, style: .plain), tableFooterView, self)

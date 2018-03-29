@@ -36,6 +36,12 @@ enum Theme {
 			$0.setTitleColor(#colorLiteral(red: 0.937036097, green: 0.9411780238, blue: 0.945192039, alpha: 1), for: UIControlState.disabled)
 			$0.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: UIFont.Weight.medium)			
 		}
+		
+		static var navigationBar: UIStyle<UINavigationBar> = UIStyle<UINavigationBar> {
+			$0.barTintColor = #colorLiteral(red: 0.9986756444, green: 0.2878709137, blue: 0.4008231759, alpha: 1)
+			$0.tintColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+			$0.barStyle = .blackOpaque
+		}
 	}
 	
 	enum Login {

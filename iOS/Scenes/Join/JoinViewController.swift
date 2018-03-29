@@ -13,6 +13,11 @@ import RxCocoa
 
 final class JoinViewController: UIViewController {
 	
+	weak var delegate: ActionDelegate?
+	
+	enum Action: DelegatedAction {
+		case didCreateAccount
+	}
 	
 	private let disposeBag: DisposeBag = DisposeBag()
 	
@@ -36,7 +41,7 @@ final class JoinViewController: UIViewController {
 			$0.topAnchor.constraint(equalTo: $2.view.topAnchor),
 			$0.bottomAnchor.constraint(equalTo: $2.view.bottomAnchor)
 			])
-		$0.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseID)
+		$0.register(TextFieldCell.self, forCellReuseIdentifier: TextFieldCell.reuseId)
 		$0.tableFooterView = $1
 		return $0
 	}(UITableView.init(frame: CGRect.zero, style: .plain), tableFooterView, self)
@@ -137,6 +142,16 @@ extension JoinViewController {
 			.bind(to: createAccountButton.rx.isEnabled)
 			.disposed(by: disposeBag)
 		
+		func didCreateAccount() {
+			delegate?.actionSender(self, didReceiveAction: Action.didCreateAccount)
+		}
+		
+		createAccountButton.rx.tap.asObservable()
+			.debounce(0.3, scheduler: MainScheduler.instance)
+			.observeOn(MainScheduler.instance)
+			.subscribe(onNext: didCreateAccount)
+			.disposed(by: disposeBag)
+
 	}
 	
 }

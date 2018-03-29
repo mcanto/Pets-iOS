@@ -11,7 +11,7 @@ import TouchKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, RootCoordinator {
-	var delegate: CoordinatorDelegate?
+	weak var delegate: CoordinatorDelegate?
 	var childCoordinators: [Coordinator] = []
 	
 	lazy var rootViewController: UIViewController = {
@@ -48,8 +48,19 @@ extension AppDelegate {
 }
 
 extension AppDelegate: CoordinatorDelegate {
-	func performFlow(_ flow: CoordinatorFlow, sender: Coordinator) {
-		
+	func performFlow(_ flow: CoordinatorFlow, sender: RootCoordinator) {
+		switch flow {
+		case SignInCoordinator.Flow.toBulletinBoard:
+			let bulletinBoardCoordinator = BulletinBoardCoordinator()
+			bulletinBoardCoordinator.delegate = self
+			bulletinBoardCoordinator.start()
+			bulletinBoardCoordinator.rootViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+			rootViewController.remove(asChildViewController: sender.rootViewController)
+			rootViewController.add(asChildViewController: bulletinBoardCoordinator.rootViewController)
+			addChildCoordinator(bulletinBoardCoordinator)
+		default:
+			break
+		}
 	}
 	
 	

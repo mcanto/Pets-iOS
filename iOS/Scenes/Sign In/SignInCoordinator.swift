@@ -9,7 +9,12 @@
 import TouchKit
 
 final class SignInCoordinator: RootCoordinator {
-	var delegate: CoordinatorDelegate?	
+	
+	enum Flow: CoordinatorFlow {
+		case toBulletinBoard
+	}
+	
+	weak var delegate: CoordinatorDelegate?	
 	var childCoordinators: [Coordinator] = []
 	var rootViewController: UIViewController {
 		return navigationController
@@ -34,7 +39,10 @@ extension SignInCoordinator: ActionDelegate {
 		case SignInViewController.Action.createAccount:
 			Logger.log(message: "create account", event: .debug)
 			let viewController = JoinViewController()
+			viewController.delegate = self
 			navigationController.pushViewController(viewController, animated: true)
+		case JoinViewController.Action.didCreateAccount:
+			delegate?.performFlow(Flow.toBulletinBoard, sender: self)
 		default:
 			break
 		}

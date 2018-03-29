@@ -8,11 +8,13 @@
 
 public protocol CoordinatorFlow {}
 
-public protocol CoordinatorDelegate where Self: Coordinator {
-	func performFlow(_ flow: CoordinatorFlow, sender: Coordinator)
+public protocol CoordinatorDelegate: AnyObject {
+	func performFlow(_ flow: CoordinatorFlow, sender: RootCoordinator)
 }
 
-public protocol Coordinator: class {
+extension CoordinatorDelegate where Self: Coordinator {}
+
+public protocol Coordinator: AnyObject {
 	var delegate: CoordinatorDelegate? { get set }
 	var childCoordinators: [Coordinator] { get set }
 	func start()
@@ -29,7 +31,7 @@ extension Coordinator {
 	}
 }
 
-public protocol RootViewControllerProvider {
+public protocol RootViewControllerProvider: AnyObject {
 	var rootViewController: UIViewController { get }
 }
 

@@ -7,11 +7,11 @@
 //
 
 public protocol Reusable {
-	static var reuseID: String { get }
+	static var reuseId: String { get }
 }
 
 extension Reusable {
-	public static var reuseID: String {
+	public static var reuseId: String {
 		return String(describing: self)
 	}
 }

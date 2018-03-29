@@ -11,16 +11,16 @@ import UIKit
 extension UIView: Reusable {}
 
 public extension UITableView {
-	func dequeueReusableCell<T>(ofType cellType: T.Type = T.self, at indexPath: IndexPath) -> T where T: UITableViewCell {
-		guard let cell = dequeueReusableCell(withIdentifier: cellType.reuseID,
+	public func dequeueReusableCell<T>(ofType cellType: T.Type = T.self, at indexPath: IndexPath) -> T where T: UITableViewCell {
+		guard let cell = dequeueReusableCell(withIdentifier: cellType.reuseId,
 											 for: indexPath) as? T else {
 												fatalError()
 		}
 		return cell
 	}
 	
-	func dequeueReusableHeaderFooterView<T>(ofType viewType: T.Type = T.self, at section: Int) -> T where T: UITableViewHeaderFooterView {
-		guard let view = dequeueReusableHeaderFooterView(withIdentifier: viewType.reuseID) as? T else {
+	public func dequeueReusableHeaderFooterView<T>(ofType viewType: T.Type = T.self, at section: Int) -> T where T: UITableViewHeaderFooterView {
+		guard let view = dequeueReusableHeaderFooterView(withIdentifier: viewType.reuseId) as? T else {
 			fatalError()
 		}
 		return view
@@ -29,8 +29,8 @@ public extension UITableView {
 }
 
 extension UICollectionView {
-	func dequeueReusableCell<T>(ofType cellType: T.Type = T.self, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
-		guard let cell = dequeueReusableCell(withReuseIdentifier: cellType.reuseID,
+	public func dequeueReusableCell<T>(ofType cellType: T.Type = T.self, at indexPath: IndexPath) -> T where T: UICollectionViewCell {
+		guard let cell = dequeueReusableCell(withReuseIdentifier: cellType.reuseId,
 											 for: indexPath) as? T else {
 												fatalError()
 		}
@@ -38,8 +38,8 @@ extension UICollectionView {
 		return cell
 	}
 	
-	func dequeueReusableSupplementaryView<T>(ofType supplementaryViewType: T.Type = T.self, supplementaryElementOfKind kind: String, at indexPath: IndexPath) -> T where T: UICollectionReusableView {
-		guard let view = dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: supplementaryViewType.reuseID, for: indexPath) as? T else {
+	public func dequeueReusableSupplementaryView<T>(ofType supplementaryViewType: T.Type = T.self, supplementaryElementOfKind kind: String, at indexPath: IndexPath) -> T where T: UICollectionReusableView {
+		guard let view = dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: supplementaryViewType.reuseId, for: indexPath) as? T else {
 			fatalError()
 		}
 		return view
