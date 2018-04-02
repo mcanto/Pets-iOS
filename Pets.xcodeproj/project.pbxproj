@@ -42,6 +42,8 @@
 		E7BFA553206AB40800B0EE2F /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7BFA551206AB40800B0EE2F /* RxSwift.framework */; };
 		E7BFA557206AB5F600B0EE2F /* UITableViewCell+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA556206AB5F600B0EE2F /* UITableViewCell+Rx.swift */; };
 		E7BFA55A206AE09200B0EE2F /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7BFA559206AE09200B0EE2F /* Result.swift */; };
+		E7CB5C98206EDAFF0040C493 /* RxCoreMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CB5C97206EDAFF0040C493 /* RxCoreMotion.swift */; };
+		E7CB5C9A206EDCB40040C493 /* UICollectionView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CB5C99206EDCB40040C493 /* UICollectionView+Rx.swift */; };
 		E7CDE7D3206A8F1700D21ED9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7CDE7D2206A8F1700D21ED9 /* Button.swift */; };
 /* End PBXBuildFile section */
 
@@ -107,6 +109,8 @@
 		E7BFA551206AB40800B0EE2F /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		E7BFA556206AB5F600B0EE2F /* UITableViewCell+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Rx.swift"; sourceTree = "<group>"; };
 		E7BFA559206AE09200B0EE2F /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		E7CB5C97206EDAFF0040C493 /* RxCoreMotion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RxCoreMotion.swift; sourceTree = "<group>"; };
+		E7CB5C99206EDCB40040C493 /* UICollectionView+Rx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+Rx.swift"; sourceTree = "<group>"; };
 		E7CDE7D2206A8F1700D21ED9 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -315,6 +319,8 @@
 			isa = PBXGroup;
 			children = (
 				E7BFA556206AB5F600B0EE2F /* UITableViewCell+Rx.swift */,
+				E7CB5C99206EDCB40040C493 /* UICollectionView+Rx.swift */,
+				E7CB5C97206EDAFF0040C493 /* RxCoreMotion.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -467,7 +473,9 @@
 				E79FCF6020697DD00034F1CC /* Theme.swift in Sources */,
 				E79FCF6C2069B2D00034F1CC /* SignInCoordinator.swift in Sources */,
 				E79FCF212066FBE90034F1CC /* AppDelegate.swift in Sources */,
+				E7CB5C98206EDAFF0040C493 /* RxCoreMotion.swift in Sources */,
 				E7BFA54E206AB0BB00B0EE2F /* JoinViewController.swift in Sources */,
+				E7CB5C9A206EDCB40040C493 /* UICollectionView+Rx.swift in Sources */,
 				E7BFA557206AB5F600B0EE2F /* UITableViewCell+Rx.swift in Sources */,
 				E7709CFF206C5AC100385C67 /* BulletinBoardViewController.swift in Sources */,
 				E79FCF2D20673F1E0034F1CC /* SignInViewController.swift in Sources */,

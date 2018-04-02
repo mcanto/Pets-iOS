@@ -8,6 +8,8 @@
 
 import UIKit
 import TouchKit
+import RxSwift
+import RxCocoa
 
 final class BulletinBoardViewController: UIViewController {
 
@@ -19,6 +21,7 @@ final class BulletinBoardViewController: UIViewController {
 	}(UICollectionViewFlowLayout())
 	
 	private lazy var collectionView: UICollectionView = {
+		$0.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
 		$0.register(BulletinCollectionCell.self, forCellWithReuseIdentifier: BulletinCollectionCell.reuseId)
 		$1.addSubview($0)
 		$0.translatesAutoresizingMaskIntoConstraints = false
@@ -47,11 +50,11 @@ final class BulletinBoardViewController: UIViewController {
 extension BulletinBoardViewController {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
-		collectionViewFlowLayout.estimatedItemSize = CGSize(width: view.bounds.width, height: 10)
+		collectionViewFlowLayout.estimatedItemSize = CGSize(width: view.bounds.width - 32, height: 10)
 	}
 	override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
 		super.viewWillTransition(to: size, with: coordinator)
-		collectionViewFlowLayout.estimatedItemSize = CGSize(width: view.bounds.width, height: 10)
+		collectionViewFlowLayout.estimatedItemSize = CGSize(width: view.bounds.width - 32, height: 10)
 		collectionViewFlowLayout.invalidateLayout()
 	}
 }
@@ -79,7 +82,17 @@ extension BulletinBoardViewController {
 	}
 }
 
+
+import CoreMotion
+
+
 private final class BulletinCollectionCell: UICollectionViewCell {
+	
+	private var elevation: CGFloat = 5
+	
+	private lazy var motionManager: Observable<MotionManager> = {
+		return $0
+	}(CMMotionManager.rx.manager())
 	
 	private lazy var width: NSLayoutConstraint = {
 		$0.isActive = true
@@ -105,13 +118,14 @@ private final class BulletinCollectionCell: UICollectionViewCell {
 		return $0
 	}(Label())
 	private lazy var postImageView: UIImageView = {
+		$0.layer.cornerRadius = 6
 		$0.translatesAutoresizingMaskIntoConstraints = false
 		$0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 		$0.setContentHuggingPriority(.defaultHigh, for: .vertical)
 		$0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
 		$0.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
 		$0.clipsToBounds = true
-		$0.image = #imageLiteral(resourceName: "kimi")
+		$0.image = #imageLiteral(resourceName: "kuki")
 		$0.contentMode = .scaleAspectFill
 		return $0
 	}(UIImageView())
@@ -157,13 +171,54 @@ private final class BulletinCollectionCell: UICollectionViewCell {
 		fatalError("init(coder:) has not been implemented")
 	}
 	
+	override func prepareForReuse() {
+		super.prepareForReuse()
+		setupMotionObservable()
+	}
+	
+	private func setupMotionObservable() {
+		
+		func getDeviceMotion(_ motionManager: MotionManager) -> Observable<CMDeviceMotion> {
+			return motionManager.deviceMotion ?? Observable.empty()
+		}
+		
+		typealias DeviceMotion = (roll: Double, pitch: Double)
+		func updateShadow(_ motion: DeviceMotion) {
+			layer.shadowOffset = CGSize(width: motion.pitch, height: motion.roll)
+			let radians = CGFloat((abs(motion.roll) + abs(motion.pitch)) / 2.0)
+			layer.shadowRadius = elevation * radians
+		}
+		
+		func toMotion(_ motion: CMDeviceMotion) -> DeviceMotion {
+			return (motion.attitude.roll, motion.attitude.pitch)
+		}
+		func accumulator(_ lastState: DeviceMotion, newValue: DeviceMotion) -> DeviceMotion {
+			let RC = 0.85
+			let dt = ( 1 / 20.0 ) // update interval
+			let alpha = (dt / (RC + dt))
+			
+			return (newValue.roll * alpha + (1.0 - alpha) * lastState.roll,
+					newValue.pitch * alpha + (1.0 - alpha) * lastState.pitch)
+		}
+		
+		motionManager
+			.flatMapLatest(getDeviceMotion)
+			.map(toMotion)
+			.scan((0, 0), accumulator: accumulator)
+//			.debug()
+			.observeOn(MainScheduler.instance)
+			.subscribe(onNext: updateShadow)
+			.disposed(by: rx.disposeBag)
+	}
+	
 	private func commonSetup() {
-//		layer.cornerRadius = 3
-//		layer.shadowColor = #colorLiteral(red: 0.9986756444, green: 0.2878709137, blue: 0.4008231759, alpha: 1)
-//		layer.shadowOffset = CGSize(width: 0, height: 2)
-//		layer.shadowOpacity = 0.5
-//		layer.shadowRadius = 2
-//		layer.masksToBounds = false
+		contentView.layer.cornerRadius = 6
+		layer.shadowColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+		layer.shadowOffset = CGSize(width: 0, height: elevation)
+		layer.shadowOpacity = 0.24
+		layer.shadowRadius = elevation
+		layer.masksToBounds = false
+		
 		contentView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 		contentView.translatesAutoresizingMaskIntoConstraints = false
 		contentView.addSubview(topStackView)
@@ -185,8 +240,13 @@ private final class BulletinCollectionCell: UICollectionViewCell {
 //			bottomStackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
 			contentView.bottomAnchor.constraint(equalTo: bottomStackView.bottomAnchor, constant: 10)
 			])
+		
+		setupMotionObservable()
+		
+		
 	}
 
+	
 }
 
 extension BulletinCollectionCell {
